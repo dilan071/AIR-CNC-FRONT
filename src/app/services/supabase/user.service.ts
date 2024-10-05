@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoginResponse, RegistroResponse }  from '../pages/interfaces/login-response.interface'; // Ajusta la ruta si es necesario
-
+import { LoginResponse, RegistroResponse }  from '../../features/pages/login-response.interface';
 @Injectable({
   providedIn: 'root'
 })
