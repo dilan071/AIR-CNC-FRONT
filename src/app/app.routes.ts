@@ -7,10 +7,12 @@ import { PerfilComponent } from './features/pages/perfil/perfil.component';
 import { PropiedadesComponent } from './features/pages/propiedades/propiedades.component';
 // Definición de rutas
 export const routes: Routes = [
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'home', component: HomeComponent }, // Página normal
     { path: 'index', component: IndexComponent }, // Página normal
     { path: 'gestion-propiedades', component: PropiedadesComponent }, // Ruta para el login
     { path: 'mi-perfil', component: PerfilComponent }, // Ruta para el login
     { path: 'login', component: LoginComponent }, // Ruta para el login
     { path: 'registro', component: RegistroComponent }, // Ruta para el registro
+    { path: '**', redirectTo: '/login' }
 ];
