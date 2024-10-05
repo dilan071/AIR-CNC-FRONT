@@ -148,10 +148,6 @@ export class AppComponent {
     this.maxdate = event['maxdate'];
     this.minprice = event['minprice'];
     this.maxprice = event['maxprice'];
-
-    console.log(event['city']);
-    console.log(event);
-    console.log('');
   }
   // funcion que inicia el filtrado general en el orden
   // locations(ubicacion) => filterRooms(habitaciones) => filterMinPrice(precio minimo) =>filterMaxPrice(precio maximo)  => filterMinDate(fecha minima) => filterMaxDate(fecha maxima)  => 
@@ -169,12 +165,9 @@ export class AppComponent {
     this.filterCity(this.listFilterCountry);
     this.filterRooms(this.listFilterCity);
       this.filterMinPrice(this.listFilterRooms);
-      console.log(this.listFilterRooms,"acabo min price con");
       this.filterMaxPrice(this.listFilterMinPrice);
-      console.log(this.listFilterMinPrice,"acabo max price con");
       this.filterMinDate(this.listFilterMaxPrice);
       this.filterMaxDate(this.listFilterMinDate);
-      console.log(this.listFilterMaxDate);
       
       return this.listFilterMaxDate;
     }
@@ -201,9 +194,6 @@ export class AppComponent {
   // funcion que hace efecto sobre las casas con el filtro de maximo precio y minimo precio
   filterMaxPrice(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
-      console.log(Number(list[index].price));
-      console.log(Number(list[index].price) < Number(this.maxprice));
-      console.log(Number(this.maxprice));
       
       
       this.maxprice !== ''

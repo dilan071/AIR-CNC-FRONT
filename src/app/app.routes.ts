@@ -6,7 +6,6 @@ import { RegistroComponent } from './auth/pages/registro/registro.component';  /
 
 // Definición de rutas
 export const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' }, // Redirección a 'home'
     { path: 'home', component: HomeComponent }, // Página normal
     { path: 'index', component: IndexComponent }, // Página normal
     { path: 'login', component: LoginComponent }, // Ruta para el login

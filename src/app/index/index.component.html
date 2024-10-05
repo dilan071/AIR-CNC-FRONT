@@ -1,21 +1,19 @@
 <header class="">
-    <label>Home</label>
-    <label> </label>
+  <a href="/home">
+  <label>Home</label></a>
     <label>Profile</label>
 </header>
 
 <body>
 
     <!-- Encabezado -->
-    <div class="bg-primary text-white text-center p-4">
-        <h1>Detalles de la Propiedad</h1>
-    </div>
+
 
 <div class="side-container">
   <div class="col-md-6">
     <img
-      src="../imagenes/$casaParam.toLowerCase().jpeg"
-      class="img-fluid"
+    [src]="getHomeInfo().image"
+    class="img-fluid"
       alt="{{ getHomeInfo().title }}"
     />
   </div>
@@ -33,7 +31,3 @@
 
 </body>
 
-<footer class="footer">
-    {{casass}}
-    © 2023 AirCNC. Todos los derechos reservados.
-    </footer>

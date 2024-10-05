@@ -143,10 +143,7 @@ listCitys = [""];
   // funcion para enviar los filtros selecionados 
   
   enviarValor() {
-    console.log('Hola desde el hijo test');
-    
-    const valor = 'Hola desde el hijo';
-    this.setCriterios.emit(
+        this.setCriterios.emit(
       {
         "maxprice":this.maxprice.value!,  
         "searchTerm":this.searchTerm.value!,  
@@ -173,13 +170,15 @@ listCitys = [""];
     this.maxprice= new FormControl('');  
     this.setCriterios.emit(
       {
-        "maxprice":"",  
-        "minprice":"",
-        "maxdate":"",
-        "mindate":"",
-        "city":"",
-        "country":"",
-        "rooms":""
+        "maxprice":this.maxprice.value!,  
+        "searchTerm":this.searchTerm.value!,  
+        "minprice":this.minprice.value!,
+        "maxdate":this.maxdate.value!,
+        "mindate":this.mindate.value!,
+        "city":this.city.value!,
+        "country":this.country.value!,
+        "rooms":this.rooms.value!
+
       }
     );
   

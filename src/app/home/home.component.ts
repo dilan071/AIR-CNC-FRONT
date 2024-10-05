@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { Supabase } from '../utils/images';
 
 interface Casa {
-  id:string;
+  id: string;
   rooms: string;
   title: string;
   description: string;
@@ -28,10 +28,10 @@ interface Casa {
   standalone: true,
   imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent, ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent {
-// listas que guardan el material filtrado
+  // listas que guardan el material filtrado
   listFilterCountry: Casa[] = [];
   listFilterCity: Casa[] = [];
   listFilterRooms: Casa[] = [];
@@ -42,10 +42,10 @@ export class HomeComponent {
 
   casas: Casa[] = [
     {
-      id:"1",
+      id: '1',
       title: 'Casa en la Playa',
       rooms: '1',
-      image: Supabase("casa1.jpeg"),
+      image: Supabase('casa1.jpeg'),
       description:
         'Una hermosa casa frente al mar con acceso privado a la playa.',
       price: '200000',
@@ -59,10 +59,10 @@ export class HomeComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa1Ubicacion',
     },
     {
-      id:"2",
+      id: '2',
       title: 'Casa de Campo',
       rooms: '1',
-      image: Supabase("casa2.jpeg"),
+      image: Supabase('casa2.jpeg'),
       country: 'colombia',
       city: 'bogoto',
       description: 'Una acogedora casa de campo con vistas espectaculares.',
@@ -75,10 +75,10 @@ export class HomeComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa2Ubicacion',
     },
     {
-      id:"3",
+      id: '3',
       title: 'Casa en la Ciudad',
       rooms: '2',
-      image: Supabase("casa3.jpeg"),
+      image: Supabase('casa3.jpeg'),
       description: 'Una moderna casa en el corazón de la ciudad.',
       price: '$300,000',
       country: 'UUEE',
@@ -91,10 +91,10 @@ export class HomeComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa3Ubicacion',
     },
     {
-      id:"4",
+      id: '4',
       title: 'Casa en la Montaña',
       rooms: '2',
-      image: Supabase("casa4.jpeg"),
+      image: Supabase('casa4.jpeg'),
       description: 'Casa acogedora rodeada de naturaleza.',
       price: '150000',
       country: 'UUEE',
@@ -107,10 +107,10 @@ export class HomeComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa2Ubicacion',
     },
     {
-      id:"5",
+      id: '5',
       title: 'Casa Moderna',
       rooms: '6',
-      image: Supabase("casa5.jpeg"),
+      image: Supabase('casa5.jpeg'),
       description: 'Casa con diseño contemporáneo y todas las comodidades.',
       price: '300000',
       date: '2024-10-08',
@@ -124,13 +124,13 @@ export class HomeComponent {
     },
     // Agrega más casas aquí
   ];
-// carrusel
+  // carrusel
   images = [
-    Supabase("casa3.jpeg"),
-    Supabase("casa6.jpeg"),
-    Supabase("casa2.jpeg"),
+    Supabase('casa3.jpeg'),
+    Supabase('casa6.jpeg'),
+    Supabase('casa5.jpeg'),
   ];
-  
+
   currentIndex = 0;
 
   nextImage() {
@@ -138,9 +138,10 @@ export class HomeComponent {
   }
 
   prevImage() {
-    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    this.currentIndex =
+      (this.currentIndex - 1 + this.images.length) % this.images.length;
   }
-  // valor de los filtros guardados localmente 
+  // valor de los filtros guardados localmente
   criterios = [''];
   title = 'Air-cn';
   rooms = '';
@@ -163,35 +164,29 @@ export class HomeComponent {
     this.minprice = event['minprice'];
     this.maxprice = event['maxprice'];
 
-    console.log(event['city']);
-    console.log(event);
-    console.log('');
   }
   // funcion que inicia el filtrado general en el orden
-  // locations(ubicacion) => filterRooms(habitaciones) => filterMinPrice(precio minimo) =>filterMaxPrice(precio maximo)  => filterMinDate(fecha minima) => filterMaxDate(fecha maxima)  => 
+  // locations(ubicacion) => filterRooms(habitaciones) => filterMinPrice(precio minimo) =>filterMaxPrice(precio maximo)  => filterMinDate(fecha minima) => filterMaxDate(fecha maxima)  =>
   filter() {
     // limpio las listas
-    this.listFilterCountry= [];
-    this.listFilterCity= [];
-    this.listFilterRooms= [];
+    this.listFilterCountry = [];
+    this.listFilterCity = [];
+    this.listFilterRooms = [];
     this.listFilterMaxPrice = [];
     this.listFilterMinPrice = [];
-    this.listFilterMaxDate= [];
-    this.listFilterMinDate= [];
+    this.listFilterMaxDate = [];
+    this.listFilterMinDate = [];
     //inicio las llamadas
     this.filterCountry(this.casas);
     this.filterCity(this.listFilterCountry);
     this.filterRooms(this.listFilterCity);
-      this.filterMinPrice(this.listFilterRooms);
-      console.log(this.listFilterRooms,"acabo min price con");
-      this.filterMaxPrice(this.listFilterMinPrice);
-      console.log(this.listFilterMinPrice,"acabo max price con");
-      this.filterMinDate(this.listFilterMaxPrice);
-      this.filterMaxDate(this.listFilterMinDate);
-      console.log(this.listFilterMaxDate);
-      
-      return this.listFilterMaxDate;
-    }
+    this.filterMinPrice(this.listFilterRooms);
+    this.filterMaxPrice(this.listFilterMinPrice);
+    this.filterMinDate(this.listFilterMaxPrice);
+    this.filterMaxDate(this.listFilterMinDate);
+
+    return this.listFilterMaxDate;
+  }
   // funcion que filtra las casas por una fecha maxima
   filterMaxDate(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
@@ -215,11 +210,6 @@ export class HomeComponent {
   // funcion que hace efecto sobre las casas con el filtro de maximo precio y minimo precio
   filterMaxPrice(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
-      console.log(Number(list[index].price));
-      console.log(Number(list[index].price) < Number(this.maxprice));
-      console.log(Number(this.maxprice));
-      
-      
       this.maxprice !== ''
         ? Number(list[index].price) < Number(this.maxprice)
           ? this.listFilterMaxPrice.push(list[index])
@@ -230,7 +220,7 @@ export class HomeComponent {
   // funcion que hace efecto sobre las casas con el filtro de minimo precio y minimo precio
   filterMinPrice(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
-      this.minprice !== ''      
+      this.minprice !== ''
         ? Number(list[index].price) > Number(this.minprice)
           ? this.listFilterMinPrice.push(list[index])
           : null
@@ -243,7 +233,7 @@ export class HomeComponent {
       this.rooms !== ''
         ? list[index].rooms == this.rooms
           ? this.listFilterRooms.push(list[index])
-          : Number(list[index].rooms)>3 &&this.rooms=="4+"
+          : Number(list[index].rooms) > 3 && this.rooms == '4+'
           ? this.listFilterRooms.push(list[index])
           : null
         : this.listFilterRooms.push(list[index]);
@@ -253,19 +243,19 @@ export class HomeComponent {
   filterCity(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
       this.city !== ''
-      ? list[index].city == this.city
-         ?this.listFilterCity.push(list[index])
-         : null
-      : this.listFilterCity.push(list[index]);
+        ? list[index].city == this.city
+          ? this.listFilterCity.push(list[index])
+          : null
+        : this.listFilterCity.push(list[index]);
     }
   }
   filterCountry(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
       this.country !== ''
-      ? list[index].country == this.country
-         ?this.listFilterCountry.push(list[index])
-         : null
-      : this.listFilterCountry.push(list[index]);
+        ? list[index].country == this.country
+          ? this.listFilterCountry.push(list[index])
+          : null
+        : this.listFilterCountry.push(list[index]);
     }
   }
 }
