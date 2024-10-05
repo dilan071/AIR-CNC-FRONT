@@ -1,0 +1,109 @@
+<form>
+  <!-- Searchbar y boton de guardar parametros -->
+  <div class="search-container">
+    <input
+      class="search-input"
+      [formControl]="searchTerm"
+      name="searchbar"
+      required
+    />
+    <!-- boton para guardar los filtros de busqueda y de consulta por criterios -->
+  </div>
+  <div class="card-filter" name="contenedor-filtros-center">
+    <div class="margins" name="contenedor ubicación">
+      <!-- Control de selecion de pais segun el pais selecionado -->
+
+      <select class="margins" [formControl]="country" name="pais" id="cars">
+        <option hidden value="">pais</option>
+        <option value="">mostrar todo</option>
+        <!-- for para compilar los diferentes paises sin repetirse -->
+        @for (item of casas; track item.title) {
+        @if(this.listCountrys.includes(item.country)==false){
+        {{
+          this.listCountrys.push(item.country)
+        }}
+        } }
+        <!-- for que trae los paises como opiones  -->
+        @for (item of listCountrys; track item) { @if(item!="") {
+        <option value="{{ item }}">{{ item }}</option>
+        } }
+      </select>
+      <div>
+        <!-- Control de selecion de ciudad segun el pais selecionado -->
+
+        <select class="margins" [formControl]="city" name="ciudad" id="city">
+          <option hidden value="">ciudad</option>
+          <option value="">mostrar todo</option>
+          @for (item of casas; track item.title) { @if(this.country.value!==""){
+          @if(item.country==this.country.value){
+          <option value="{{ item.city }}">{{ item.city }}</option>
+          } } }
+        </select>
+
+        <!-- Control de selecion de numero de habitaciones de 1 a 3 y si es 4 se buscaran mayores a 3 -->
+        <select
+          class="margins"
+          [formControl]="rooms"
+          name="habitaciones"
+          id="habitaciones"
+        >
+          <option hidden value="">habitaciones</option>
+          <option value="">mostrar todo</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4+">4+</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="margins" name="contenedor fecha">
+      <!-- Filtro por intevalo de fecha -->
+
+      <label>fecha inicial</label>
+      <input type="date" name="mindate" [formControl]="mindate" required />
+      <div>
+        <label>fecha final</label>
+
+        <input type="date" name="maxdate" [formControl]="maxdate" required />
+      </div>
+    </div>
+
+    <!-- Filtro por intevalo de precio -->
+
+    <div class="margins contenedor precio">
+      <label>precio inicial</label>
+      <input type="number" name="minprice" [formControl]="minprice" required />
+      <div>
+        <label>precio final</label>
+        <input
+          class=""
+          type="number"
+          name="maxprice"
+          defaultValue="max"
+          [formControl]="maxprice"
+          required
+        />
+      </div>
+    </div>
+
+    <div>
+      <!-- boton de reseteo de los campos-->
+      <button
+        type="button"
+        (click)="$event.preventDefault(); setReset()"
+        class="button"
+        type="submit"
+      >
+        Reset
+      </button>
+      <button
+      class="button"
+      (click)="$event.preventDefault(); enviarValor()"
+    >
+      Aplicar
+    </button>
+
+    </div>
+  </div>
+</form>

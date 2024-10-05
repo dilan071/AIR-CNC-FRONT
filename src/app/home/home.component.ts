@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { SearchBarComponent } from './components/search-bar/search-bar.component';
-import { GaleryCardComponent } from './components/galery-card/galery-card.component';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { SearchBarComponent } from '../components/search-bar/search-bar.component';
+import { GaleryCardComponent } from '../components/galery-card/galery-card.component';
 import { FormControl } from '@angular/forms';
+
 interface Casa {
   id:string;
   rooms: string;
@@ -20,15 +21,16 @@ interface Casa {
   date: string;
   searchTerm?: string;
 }
+
 @Component({
-  selector: 'app-root',
+  selector: 'app-home',
   standalone: true,
   imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css'
 })
-export class AppComponent {
-  // listas que guardan el material filtrado
+export class HomeComponent {
+// listas que guardan el material filtrado
   listFilterCountry: Casa[] = [];
   listFilterCity: Casa[] = [];
   listFilterRooms: Casa[] = [];
@@ -121,8 +123,22 @@ export class AppComponent {
     },
     // Agrega más casas aquí
   ];
-
+// carrusel
+  images = [
+    'https://via.placeholder.com/800x300?text=Imagen+1',
+    'https://via.placeholder.com/800x300?text=Imagen+2',
+    'https://via.placeholder.com/800x300?text=Imagen+3'
+  ];
   
+  currentIndex = 0;
+
+  nextImage() {
+    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+  }
+
+  prevImage() {
+    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+  }
   // valor de los filtros guardados localmente 
   criterios = [''];
   title = 'Air-cn';
