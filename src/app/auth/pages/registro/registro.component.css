@@ -47,15 +47,15 @@ app-root {
 }
 
 main {
-    width: 100%;
-    padding: 50px;
-    background-size: cover;
-    background-attachment: fixed;
-    flex: 1;
+    background-image: url('https://jzoykxtgshtojpikzhhd.supabase.co/storage/v1/object/public/homes/fondo.jpeg');
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-top: auto; 
 }
 
 .footer {
-    background-color: #0083ee;
+    background-color: #ee0020;
     color: white;
     padding: 20px;
     text-align: center;
@@ -88,6 +88,7 @@ main {
     align-items: center;
     height: 100%;
     padding: 20px;
+    
 }
 
 .caja__trasera {
