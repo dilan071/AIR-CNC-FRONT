@@ -126,9 +126,9 @@ export class HomeComponent {
   ];
 // carrusel
   images = [
+    Supabase("casa3.jpeg"),
     Supabase("casa6.jpeg"),
-    Supabase("casa7.jpeg"),
-    Supabase("casa7.jpeg"),
+    Supabase("casa2.jpeg"),
   ];
   
   currentIndex = 0;
