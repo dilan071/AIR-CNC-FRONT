@@ -1,18 +1,26 @@
+header {
+  display: flex;                 
+  justify-content: space-between; 
+  align-items: center;        
+  padding: 10px 20px;          
+  background-color: #f8f9fa;   
+  border-bottom: 1px solid #ccc; 
+}
 button{
-    background-color: #0d6efd; /* Color de fondo inicial */
-    color: #ffffff; /* Color del texto */
-    border: none; /* Sin borde */
-    padding: 10px 20px; /* Espaciado interno */
-    font-size: 16px; /* Tamaño de fuente */
-    cursor: pointer; /* Cambiar cursor a mano */
-    border-radius: 5px; /* Bordes redondeados */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición de color y transformación */}
+    background-color: #0d6efd; 
+    color: #ffffff; 
+    border: none; 
+    padding: 10px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease, transform 0.2s ease;}
 footer {
-    background-color: #0d6efd; /* Color de fondo azul primario */
-    color: #f5b4b4; /* Texto en blanco */
-    text-align: center; /* Centrar el texto */
-    padding: 1.5rem; /* Espaciado interno (p-4) */
-    margin-top: 3rem; /* Margen superior (mt-5) */
+    background-color: #0d6efd; 
+    color: #f5b4b4; 
+    text-align: center; 
+    padding: 1.5rem; 
+    margin-top: 3rem;
 }
 
 .carousel {
@@ -53,8 +61,8 @@ footer {
   
 .flex-content{
     justify-content: center;
-    display: flex; /* Habilitar Flexbox */
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */ 
+    display: flex; 
+    flex-wrap: wrap; 
 }
 .center{
     margin-left: auto;
@@ -70,4 +78,53 @@ footer {
     border: 2px solid  #0d6efd; 
     border-radius: 9px 9px 9px 9px; 
     outline: none; 
+}
+#profile {
+  display: flex;               
+  align-items: center;       
+}
+
+.avatar {
+  width: 50px;              
+  height: 50px;             
+  border-radius: 50%;       
+  margin-right: 10px;       
+  border: 2px solid #007bff; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+#userName {
+  font-weight: bold;        
+  font-size: 1.2rem;       
+  color: #333;             
+}
+
+ul {
+  list-style: none;          
+  padding: 0;               
+  margin: 0; 
+  display: flex;                
+}
+
+nav {
+  text-align: left;         
+}
+li {
+  margin-left: 20px;      
+}
+a:hover {
+  text-decoration: underline; 
+}
+.logout-button {
+  background-color: #ff4b4b; 
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #ff0000; 
 }

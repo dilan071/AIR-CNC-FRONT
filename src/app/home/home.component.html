@@ -7,6 +7,20 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
+<header>
+  <div id="profile">
+    <img src="assets/casa2.jpeg" class="avatar" alt="avatar" />
+    <span id="userName">Dilan</span>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="/mi-perfil">Mi perfil</a></li>
+      <li><a href="/gestion-propiedades">Gestión de propiedades</a></li>
+      <li><a   href="/login/login.component.html">cerrar sesion</a></li>
+    </ul>
+  </nav>
+</header>
+
 <main class="main">
   <div class="carousel">
     <img
@@ -19,27 +33,27 @@
       <button (click)="nextImage()" class="control-button">Siguiente</button>
     </div>
   </div>
+  
   <div class="content">
     <div>
       <app-search-bar (setCriterios)="setFilters($event)"></app-search-bar>
-
       <div class="flex-content">
         @for (item of filter(); track item.title;) {
-        @if(item.title.toLowerCase().includes(this.searchTerm)) {
-        <app-galery-card [cardCasainfo]="item"></app-galery-card>
-        <!-- <app-galery-card cardCasainfo={{title:""}}></app-galery-card> -->
-        } } @empty {
-        <p class="card-filter">There are no items.</p>
+          @if(item.title.toLowerCase().includes(this.searchTerm)) {
+            <app-galery-card [cardCasainfo]="item"></app-galery-card>
+          }
+        } @empty {
+          <p class="card-filter">There are no items.</p>
         }
       </div>
     </div>
   </div>
 </main>
+
 <footer class="footer">© 2023 AirCNC. Todos los derechos reservados.</footer>
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

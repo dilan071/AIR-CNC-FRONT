@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { SearchBarComponent } from '../components/search-bar/search-bar.component';
 import { GaleryCardComponent } from '../components/galery-card/galery-card.component';
 import { FormControl } from '@angular/forms';
@@ -26,7 +26,7 @@ interface Casa {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent],
+  imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent, ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
