@@ -1,0 +1,23 @@
+<div class="contenedor__todo">
+    <div class="contenedor__login-registro">
+        <form [formGroup]="registrarForm" (ngSubmit)="onRegister()" id="formulario__registro" class="formulario__registro">
+            <h2>Registrarse</h2>
+
+            <label for="email">Correo Electrónico</label>
+            <input id="email" type="email" formControlName="email" class="input-text" placeholder="Correo Electrónico" required>
+            
+            <label for="userNameRegister">Nombre de usuario</label>
+            <input id="userNameRegister" formControlName="userName" type="text" class="input-text" placeholder="Nombre de usuario" required>
+            
+            <label for="passwordRegister">Contraseña</label>
+            <input id="passwordRegister" formControlName="password" type="password" class="input-text" placeholder="Contraseña" required>
+            
+            <label for="confirmPassword">Confirmar Contraseña</label>
+            <input id="confirmPassword" formControlName="confirmPassword" type="password" class="input-text" placeholder="Confirmar Contraseña" required>
+
+            <button type="submit" class="primary">Registrar</button>
+            <a [routerLink]="['/login']" class="secondary">Regresar</a>
+            <p>¿Ya tienes una cuenta? <a [routerLink]="['/login']" class="secondary">Iniciar Sesión</a></p>
+        </form>
+    </div>
+</div>

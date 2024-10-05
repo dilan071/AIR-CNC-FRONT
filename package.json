@@ -22,12 +22,13 @@
     "@ng-icons/heroicons": "^29.5.1",
     "@supabase/supabase-js": "^2.45.4",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.14.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.3",
-    "@angular/cli": "^18.2.3",
+    "@angular/cli": "^18.2.7",
     "@angular/compiler-cli": "^18.2.0",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.2.0",

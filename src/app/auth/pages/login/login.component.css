@@ -7,7 +7,7 @@
 }
 
 body {
-    
+    background-image: url(/ProyectoAvance/src/assets/fondo.jpeg);
 
     background-size: cover;
     background-repeat: no-repeat;

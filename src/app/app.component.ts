@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet } from  '@angular/router';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { GaleryCardComponent } from './components/galery-card/galery-card.component';
-import { FormControl } from '@angular/forms';
+import { LoginComponent } from './auth/pages/login/login.component';
+import { RegistroComponent } from './auth/pages/registro/registro.component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FooterComponent } from './layout/componets/footer/footer.component';
 interface Casa {
   id:string;
   rooms: string;
@@ -23,7 +26,7 @@ interface Casa {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent],
+  imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent, FooterComponent, LoginComponent, RegistroComponent, ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

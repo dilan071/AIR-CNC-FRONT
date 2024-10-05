@@ -1,0 +1,89 @@
+ <!-- Encabezado -->
+ <header class="bg-primary text-white text-center p-4">
+    <h1>Detalles de la Propiedad</h1>
+</header>
+
+<!-- Detalles de la casa a rentar o vender -->
+<div class="container mt-5" id="property-details">
+    <!-- Aquí se llenarán los detalles de la propiedad -->
+</div>
+
+<!-- Mapa de Google Maps -->
+<h3 class="mt-4">Ubicación</h3>
+<div class="embed-responsive embed-responsive-16by9 mb-4" id="map-container">
+    <!-- Aquí se insertará el iframe del mapa -->
+</div>
+
+<!-- Pie de Página -->
+<footer class="bg-primary text-white text-center p-4 mt-5">
+    <p>&copy; 2023 CasaIdeal. Todos los derechos reservados.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script>
+    const properties = {
+        Casa7: {
+            title: "Casa en la Playa",
+            description: "Una hermosa casa frente al mar con acceso privado a la playa.",
+            price: "$200,000",
+            owner: "Juan Pérez",
+            area: "Zona residencial segura",
+            negotiable: "Sí",
+            type: "Venta",
+            mapSrc: "https://www.google.com/maps/embed?pb=...Casa1Ubicacion"
+        },
+        Casa2: {
+            title: "Casa de Campo",
+            description: "Una acogedora casa de campo con vistas espectaculares.",
+            price: "$150,000",
+            owner: "Maria López",
+            area: "Zona rural tranquila",
+            negotiable: "No",
+            type: "Renta",
+            mapSrc: "https://www.google.com/maps/embed?pb=...Casa2Ubicacion"
+        },
+        Casa3: {
+            title: "Casa en la Ciudad",
+            description: "Una moderna casa en el corazón de la ciudad.",
+            price: "$300,000",
+            owner: "Carlos Sánchez",
+            area: "Centro de la ciudad",
+            negotiable: "Sí",
+            type: "Venta/Renta",
+            mapSrc: "https://www.google.com/maps/embed?pb=...Casa3Ubicacion"
+        }
+    };
+
+    function getPropertyDetails() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const casaParam = urlParams.get('casa'); // Obtener el parámetro 'casa' de la URL
+        const property = properties[casaParam];
+
+        if (property) {
+            document.getElementById('property-details').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="../imagenes/${casaParam.toLowerCase()}.jpeg" class="img-fluid" alt="${property.title}">
+                    </div>
+                    <div class="col-md-6">
+                        <h2>${property.title}</h2>
+                        <p><strong>Descripción:</strong> ${property.description}</p>
+                        <p><strong>Valor:</strong> ${property.price}</p>
+                        <p><strong>Dueño:</strong> ${property.owner}</p>
+                        <p><strong>Zona:</strong> ${property.area}</p>
+                        <p><strong>Negociable:</strong> ${property.negotiable}</p>
+                        <p><strong>Tipo:</strong> ${property.type}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('map-container').innerHTML = `
+                <iframe class="embed-responsive-item" src="${property.mapSrc}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            `;
+        } else {
+            document.getElementById('property-details').innerHTML = `<p>Propiedad no encontrada.</p>`;
+        }
+    }
+    window.onload = getPropertyDetails;
+</script>

@@ -8,17 +8,19 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it(`should have the 'AirCNC' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(app.title).toEqual('AirCNC');
   });
 
-  it(`should have the 'Air-cn' title`, () => {
+  it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Air-cn');
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, AirCNC');
   });
+});
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
@@ -26,4 +28,4 @@ describe('AppComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Air-cn');
   });
-});
+

@@ -5,18 +5,38 @@
     text-decoration: none;
     font-family: sans-serif;
 }
-
 body {
-    
-
+    background-image: url(/ProyectoAvance/src/assets/fondo.jpeg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    height: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Estilos de navegación */
+nav {
+    background-color: #007bff; /* Color del fondo del menú */
+}
+nav ul {
+    list-style-type: none; /* Eliminar viñetas */
+    padding: 0; /* Sin padding */
+    margin: 0; /* Sin margen */
+    display: flex; /* Para que los elementos estén en línea */
+    justify-content: center; /* Centrar los elementos */
+}
+nav ul li {
+    margin: 0 15px; /* Espaciado entre los elementos */
+}
+nav ul li a {
+    color: white; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+}
+nav ul li a:hover {
+    text-decoration: underline; /* Subrayado al pasar el ratón */
 }
 
 app-root {
@@ -34,7 +54,7 @@ main {
     flex: 1;
 }
 
-.foter {
+.footer {
     background-color: #0083ee;
     color: white;
     padding: 20px;
@@ -174,15 +194,6 @@ main {
 #btnRegresar:hover {
     background-color: #333; /* Color al pasar el ratón */
 }
-/* Formularios */
-.formulario__login {
-    opacity: 1;
-    display: block;
-}
-
-.formulario__registro {
-    display: block;
-}
 
 /* Consultas de medios */
 @media (max-width: 1060px) {
@@ -202,6 +213,7 @@ main {
         padding: 0 20px;
     }
 }
+
 
 @media (max-width: 585px) {
     .contenedor__todo {
