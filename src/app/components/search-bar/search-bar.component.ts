@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormBuilder } from '@angular/forms';import { RouterOutlet } from '@angular/router';
+import { Supabase } from '../../utils/images';
 
 interface Casa {
   id:string;
@@ -44,13 +45,12 @@ listCitys = [""];
   minprice = new FormControl('');
   maxprice= new FormControl('');
 
-
   casas: Casa[] = [
     {
       id:"1",
       title: 'Casa en la Playa',
       rooms: '1',
-      image: '',
+      image: Supabase("casa1.jpeg"),
       description:
         'Una hermosa casa frente al mar con acceso privado a la playa.',
       price: '200000',
@@ -67,7 +67,7 @@ listCitys = [""];
       id:"2",
       title: 'Casa de Campo',
       rooms: '1',
-      image: '',
+      image: Supabase("casa2.jpeg"),
       country: 'colombia',
       city: 'bogoto',
       description: 'Una acogedora casa de campo con vistas espectaculares.',
@@ -83,7 +83,7 @@ listCitys = [""];
       id:"3",
       title: 'Casa en la Ciudad',
       rooms: '2',
-      image: '',
+      image: Supabase("casa3.jpeg"),
       description: 'Una moderna casa en el corazón de la ciudad.',
       price: '$300,000',
       country: 'UUEE',
@@ -99,7 +99,7 @@ listCitys = [""];
       id:"4",
       title: 'Casa en la Montaña',
       rooms: '2',
-      image: '',
+      image: Supabase("casa4.jpeg"),
       description: 'Casa acogedora rodeada de naturaleza.',
       price: '150000',
       country: 'UUEE',
@@ -115,7 +115,7 @@ listCitys = [""];
       id:"5",
       title: 'Casa Moderna',
       rooms: '6',
-      image: '',
+      image: Supabase("casa5.jpeg"),
       description: 'Casa con diseño contemporáneo y todas las comodidades.',
       price: '300000',
       date: '2024-10-08',
@@ -129,6 +129,7 @@ listCitys = [""];
     },
     // Agrega más casas aquí
   ];
+
 
 // variables que el componente va a devolver a la pagina que lo contendra para saber que filtros estan vigentes
   @Output() setCriterios: EventEmitter<any> = new EventEmitter<string>();

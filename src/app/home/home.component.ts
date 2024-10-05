@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { SearchBarComponent } from '../components/search-bar/search-bar.component';
 import { GaleryCardComponent } from '../components/galery-card/galery-card.component';
 import { FormControl } from '@angular/forms';
+import { Supabase } from '../utils/images';
 
 interface Casa {
   id:string;
@@ -44,7 +45,7 @@ export class HomeComponent {
       id:"1",
       title: 'Casa en la Playa',
       rooms: '1',
-      image: '',
+      image: Supabase("casa1.jpeg"),
       description:
         'Una hermosa casa frente al mar con acceso privado a la playa.',
       price: '200000',
@@ -61,7 +62,7 @@ export class HomeComponent {
       id:"2",
       title: 'Casa de Campo',
       rooms: '1',
-      image: '',
+      image: Supabase("casa2.jpeg"),
       country: 'colombia',
       city: 'bogoto',
       description: 'Una acogedora casa de campo con vistas espectaculares.',
@@ -77,7 +78,7 @@ export class HomeComponent {
       id:"3",
       title: 'Casa en la Ciudad',
       rooms: '2',
-      image: '',
+      image: Supabase("casa3.jpeg"),
       description: 'Una moderna casa en el corazón de la ciudad.',
       price: '$300,000',
       country: 'UUEE',
@@ -93,7 +94,7 @@ export class HomeComponent {
       id:"4",
       title: 'Casa en la Montaña',
       rooms: '2',
-      image: '',
+      image: Supabase("casa4.jpeg"),
       description: 'Casa acogedora rodeada de naturaleza.',
       price: '150000',
       country: 'UUEE',
@@ -109,7 +110,7 @@ export class HomeComponent {
       id:"5",
       title: 'Casa Moderna',
       rooms: '6',
-      image: '',
+      image: Supabase("casa5.jpeg"),
       description: 'Casa con diseño contemporáneo y todas las comodidades.',
       price: '300000',
       date: '2024-10-08',
@@ -125,9 +126,9 @@ export class HomeComponent {
   ];
 // carrusel
   images = [
-    'https://via.placeholder.com/800x300?text=Imagen+1',
-    'https://via.placeholder.com/800x300?text=Imagen+2',
-    'https://via.placeholder.com/800x300?text=Imagen+3'
+    Supabase("casa6.jpeg"),
+    Supabase("casa7.jpeg"),
+    Supabase("casa7.jpeg"),
   ];
   
   currentIndex = 0;

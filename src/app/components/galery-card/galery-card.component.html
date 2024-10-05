@@ -2,7 +2,7 @@
   <!--<input [formControl]="casa"  required />-->
   <div>
     <img
-      src="{{ cardCasainfo.image }}"
+      [src]="cardCasainfo.image"
       class="card-img-top"
       alt="Casa Oferta"
     />
@@ -13,3 +13,4 @@
     <a href={{this.index+cardCasainfo.id}}> <button class="button">Ver más</button></a>
   </div>
 </div>
+
