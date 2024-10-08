@@ -28,7 +28,11 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "sweetalert2",
+              "ws"
+            ]
           },
           "configurations": {
             "production": {
