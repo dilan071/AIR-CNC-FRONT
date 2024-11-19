@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RegistroComponent } from './registro.component'; // Asegúrate de que la ruta sea correcta
+import { RegistroComponent } from './registro.component'; 
 
 describe('RegistroComponent', () => {
   let component: RegistroComponent;
@@ -7,7 +7,7 @@ describe('RegistroComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RegistroComponent] // Cambiar 'imports' a 'declarations'
+      declarations: [RegistroComponent] 
     })
     .compileComponents();
     

@@ -1,91 +1,94 @@
+// registro.component.ts
 import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { UserService } from '../../services/user.service'; 
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
-  registrarForm: FormGroup; // Declara registrarForm como FormGroup
+  registroForm: FormGroup;
+  loading: boolean = false;
+  errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private router: Router, private userService: UserService) {
-    // Inicializa registrarForm en el constructor
-    this.registrarForm = this.fb.group({
-      userName: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(12)]],
-      password: ['', [Validators.required, Validators.minLength(1)]], // Cambia la longitud mínima según necesites
-      confirmPassword: ['', [Validators.required]], // Campo para confirmar contraseña
-      email: ['', [Validators.required, Validators.email]], // Agrega el campo email
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private router: Router
+  ) {
+    this.registroForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      is_owner: [false] 
     });
   }
 
-  onRegister() {
-    // Verifica si el formulario es válido
-    if (!this.registrarForm.valid) {
-      this.showValidationErrors();
+  onSubmit() {
+   
+    if (this.registroForm.invalid) {
       return;
     }
 
-    const userName = this.registrarForm.value.userName!.trim();
-    const password = this.registrarForm.value.password!.trim();
-    const confirmPassword = this.registrarForm.value.confirmPassword!.trim();
-    const email = this.registrarForm.value.email!.trim();
+   
+    this.loading = true;
+    const { email, username, password, is_owner } = this.registroForm.value;
 
-    // Verifica si las contraseñas coinciden
-    if (password !== confirmPassword) {
-      Swal.fire({
-        title: 'Contraseña Incorrecta',
-        text: 'Las contraseñas no coinciden',
-        icon: 'error',
-      });
-      return;
-    }
-
-    // Crea un objeto que contenga userName, password y email
-    const response = this.userService.register({ userName, password, email });
-
-    if (response.success) {
-      Swal.fire({
-        title: 'Registro Exitoso',
-        text: 'Registro completado exitosamente. Puedes iniciar sesión.',
-        icon: 'success',
-      }).then(() => {
-        this.router.navigateByUrl('/login'); // Redirige al usuario a la página de inicio de sesión
-      });
-    } else {
-      Swal.fire({
-        title: 'Registro Fallido',
-        text: response.message,
-        icon: 'error',
-      });
-    }
-  }
-
-  private showValidationErrors() {
-    let message = 'Por favor, complete todos los campos correctamente:\n';
-
-    if (this.registrarForm.get('userName')?.invalid) {
-      message += '- Nombre de usuario debe tener entre 8 y 12 caracteres.\n';
-    }
-    if (this.registrarForm.get('password')?.invalid) {
-      message += '- Contraseña es obligatoria y debe tener al menos 1 carácter.\n';
-    }
-    if (this.registrarForm.get('confirmPassword')?.invalid) {
-      message += '- Confirmar contraseña es obligatoria.\n';
-    }
-    if (this.registrarForm.get('email')?.invalid) {
-      message += '- Correo electrónico es obligatorio y debe ser un correo válido.\n';
-    }
-
-    Swal.fire({
-      title: 'Errores de Validación',
-      text: message,
-      icon: 'warning',
+    
+    this.userService.register({ email, username, password, is_owner }).subscribe({
+      next: (response) => {
+        // Si el registro es exitoso, mostramos una alerta de éxito
+        Swal.fire({
+          icon: 'success',
+          title: '¡Registro Exitoso!',
+          text: 'El usuario ha sido registrado correctamente.',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          
+          this.router.navigate(['/login']);
+        });
+      },
+      error: (error) => {
+        
+        this.loading = false;
+        this.errorMessage = 'Hubo un error en el registro. Por favor, inténtalo nuevamente.';
+        
+        if (error.status === 400) {
+          // Error de correo ya registrado
+          if (error.error.message && error.error.message.includes("already exists")) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Correo ya registrado',
+              text: `El correo ${this.registroForm.value.email} ya está registrado. Intenta con otro.`,
+              confirmButtonText: 'Aceptar'
+            });
+          } else {
+            // Otro tipo de error
+            Swal.fire({
+              icon: 'error',
+              title: 'Error en el registro',
+              text: 'Hubo un problema al procesar tu solicitud. Intenta de nuevo más tarde.',
+              confirmButtonText: 'Aceptar'
+            });
+          }
+        } else {
+          // Error de conexión o cualquier otro tipo de error
+          Swal.fire({
+            icon: 'error',
+            title: 'Error de conexión',
+            text: 'Hubo un problema con la conexión al servidor. Por favor, inténtalo de nuevo.',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      }
     });
   }
 }

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from  '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { GaleryCardComponent } from './components/galery-card/galery-card.component';
 import { LoginComponent } from './auth/pages/login/login.component';
 import { RegistroComponent } from './auth/pages/registro/registro.component';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FooterComponent } from './layout/componets/footer/footer.component';
+
 interface Casa {
-  id:string;
+  id: string;
   rooms: string;
   title: string;
   description: string;
@@ -23,12 +24,22 @@ interface Casa {
   date: string;
   searchTerm?: string;
 }
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent, FooterComponent, LoginComponent, RegistroComponent, ReactiveFormsModule],
+  imports: [
+    RouterOutlet, 
+    SearchBarComponent, 
+    GaleryCardComponent, 
+    FooterComponent, 
+    LoginComponent, 
+    RegistroComponent, 
+    ReactiveFormsModule, 
+    FormsModule
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   // listas que guardan el material filtrado
@@ -42,12 +53,11 @@ export class AppComponent {
 
   casas: Casa[] = [
     {
-      id:"1",
+      id: "1",
       title: 'Casa en la Playa',
       rooms: '1',
       image: '',
-      description:
-        'Una hermosa casa frente al mar con acceso privado a la playa.',
+      description: 'Una hermosa casa frente al mar con acceso privado a la playa.',
       price: '200000',
       country: 'colombia',
       city: 'bogoto',
@@ -59,7 +69,7 @@ export class AppComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa1Ubicacion',
     },
     {
-      id:"2",
+      id: "2",
       title: 'Casa de Campo',
       rooms: '1',
       image: '',
@@ -75,7 +85,7 @@ export class AppComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa2Ubicacion',
     },
     {
-      id:"3",
+      id: "3",
       title: 'Casa en la Ciudad',
       rooms: '2',
       image: '',
@@ -91,7 +101,7 @@ export class AppComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa3Ubicacion',
     },
     {
-      id:"4",
+      id: "4",
       title: 'Casa en la Montaña',
       rooms: '2',
       image: '',
@@ -107,7 +117,7 @@ export class AppComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa2Ubicacion',
     },
     {
-      id:"5",
+      id: "5",
       title: 'Casa Moderna',
       rooms: '6',
       image: '',
@@ -125,7 +135,6 @@ export class AppComponent {
     // Agrega más casas aquí
   ];
 
-  
   // valor de los filtros guardados localmente 
   criterios = [''];
   title = 'Air-cn';
@@ -149,28 +158,30 @@ export class AppComponent {
     this.minprice = event['minprice'];
     this.maxprice = event['maxprice'];
   }
+
   // funcion que inicia el filtrado general en el orden
   // locations(ubicacion) => filterRooms(habitaciones) => filterMinPrice(precio minimo) =>filterMaxPrice(precio maximo)  => filterMinDate(fecha minima) => filterMaxDate(fecha maxima)  => 
   filter() {
     // limpio las listas
-    this.listFilterCountry= [];
-    this.listFilterCity= [];
-    this.listFilterRooms= [];
+    this.listFilterCountry = [];
+    this.listFilterCity = [];
+    this.listFilterRooms = [];
     this.listFilterMaxPrice = [];
     this.listFilterMinPrice = [];
-    this.listFilterMaxDate= [];
-    this.listFilterMinDate= [];
-    //inicio las llamadas
+    this.listFilterMaxDate = [];
+    this.listFilterMinDate = [];
+    // inicio las llamadas
     this.filterCountry(this.casas);
     this.filterCity(this.listFilterCountry);
     this.filterRooms(this.listFilterCity);
-      this.filterMinPrice(this.listFilterRooms);
-      this.filterMaxPrice(this.listFilterMinPrice);
-      this.filterMinDate(this.listFilterMaxPrice);
-      this.filterMaxDate(this.listFilterMinDate);
-      
-      return this.listFilterMaxDate;
-    }
+    this.filterMinPrice(this.listFilterRooms);
+    this.filterMaxPrice(this.listFilterMinPrice);
+    this.filterMinDate(this.listFilterMaxPrice);
+    this.filterMaxDate(this.listFilterMinDate);
+    
+    return this.listFilterMaxDate;
+  }
+
   // funcion que filtra las casas por una fecha maxima
   filterMaxDate(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
@@ -181,6 +192,7 @@ export class AppComponent {
         : this.listFilterMaxDate.push(list[index]);
     }
   }
+
   // funcion que filtra las casas por una fecha minima
   filterMinDate(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
@@ -191,11 +203,10 @@ export class AppComponent {
         : this.listFilterMinDate.push(list[index]);
     }
   }
+
   // funcion que hace efecto sobre las casas con el filtro de maximo precio y minimo precio
   filterMaxPrice(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
-      
-      
       this.maxprice !== ''
         ? Number(list[index].price) < Number(this.maxprice)
           ? this.listFilterMaxPrice.push(list[index])
@@ -203,45 +214,51 @@ export class AppComponent {
         : this.listFilterMaxPrice.push(list[index]);
     }
   }
+
   // funcion que hace efecto sobre las casas con el filtro de minimo precio y minimo precio
   filterMinPrice(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
-      this.minprice !== ''      
+      this.minprice !== ''
         ? Number(list[index].price) > Number(this.minprice)
           ? this.listFilterMinPrice.push(list[index])
           : null
         : this.listFilterMinPrice.push(list[index]);
     }
   }
+
   // funcion que hace efecto sobre las casas con el filtro de habitaciones
   filterRooms(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
       this.rooms !== ''
         ? list[index].rooms == this.rooms
           ? this.listFilterRooms.push(list[index])
-          : Number(list[index].rooms)>3 &&this.rooms=="4+"
+          : Number(list[index].rooms) > 3 && this.rooms == "4+"
           ? this.listFilterRooms.push(list[index])
           : null
         : this.listFilterRooms.push(list[index]);
     }
   }
-  // funcion que hace efecto sobre las casas con el filtro de  ciudad
+
+  // funcion que hace efecto sobre las casas con el filtro de ciudad
   filterCity(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
       this.city !== ''
-      ? list[index].city == this.city
-         ?this.listFilterCity.push(list[index])
-         : null
-      : this.listFilterCity.push(list[index]);
+        ? list[index].city == this.city
+          ? this.listFilterCity.push(list[index])
+          : null
+        : this.listFilterCity.push(list[index]);
     }
   }
+
+  // funcion que hace efecto sobre las casas con el filtro de pais
   filterCountry(list: Casa[]) {
     for (let index = 0; index < list.length; index++) {
       this.country !== ''
-      ? list[index].country == this.country
-         ?this.listFilterCountry.push(list[index])
-         : null
-      : this.listFilterCountry.push(list[index]);
+        ? list[index].country == this.country
+          ? this.listFilterCountry.push(list[index])
+          : null
+        : this.listFilterCountry.push(list[index]);
     }
   }
 }
+

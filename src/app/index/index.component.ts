@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../services/supabase/supabase.service';
 import { Supabase } from '../utils/images';
+import { ReviewService } from '../services/supabase/review.service';
+import { ReviewFormComponent } from '../features/pages/reviews/review-form.component';
+
+
 interface Casa {
-  id:string;
+  id: string;
   rooms: string;
   title: string;
   description: string;
@@ -18,31 +22,34 @@ interface Casa {
   mapSrc: string;
   date: string;
   searchTerm?: string;
+  rating?: number; 
 }
+
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [],
+  imports: [ReviewFormComponent, RouterLink],
   templateUrl: './index.component.html',
-  styleUrl: './index.component.css',
+  styleUrls: ['./index.component.css'],  
 })
 export class IndexComponent {
   paramLabel = '';
-  constructor(private route: ActivatedRoute,private supabaseService: SupabaseService) {}
+  
+  constructor(private route: ActivatedRoute, private supabaseService: SupabaseService) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.paramLabel = params['search'] || this.paramLabel; // Cambia el nombre según el parámetro
+      this.paramLabel = params['search'] || this.paramLabel;
     });
   }
+
   casas: Casa[] = [
     {
-      id:"1",
+      id: "1",
       title: 'Casa en la Playa',
       rooms: '1',
       image: Supabase("casa1.jpeg"),
-      description:
-        'Una hermosa casa frente al mar con acceso privado a la playa.',
+      description: 'Una hermosa casa frente al mar con acceso privado a la playa.',
       price: '200000',
       country: 'colombia',
       city: 'bogoto',
@@ -54,7 +61,7 @@ export class IndexComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa1Ubicacion',
     },
     {
-      id:"2",
+      id: "2",
       title: 'Casa de Campo',
       rooms: '1',
       image: Supabase("casa2.jpeg"),
@@ -70,7 +77,7 @@ export class IndexComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa2Ubicacion',
     },
     {
-      id:"3",
+      id: "3",
       title: 'Casa en la Ciudad',
       rooms: '2',
       image: Supabase("casa3.jpeg"),
@@ -86,7 +93,7 @@ export class IndexComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa3Ubicacion',
     },
     {
-      id:"4",
+      id: "4",
       title: 'Casa en la Montaña',
       rooms: '2',
       image: Supabase("casa4.jpeg"),
@@ -102,7 +109,7 @@ export class IndexComponent {
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa2Ubicacion',
     },
     {
-      id:"5",
+      id: "5",
       title: 'Casa Moderna',
       rooms: '6',
       image: Supabase("casa5.jpeg"),
@@ -117,34 +124,25 @@ export class IndexComponent {
       type: 'Venta',
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa3Ubicacion',
     },
-    // Agrega más casas aquí
   ];
-
+  
 
   getHomeInfo() {
     switch (Number(this.paramLabel)) {
       case 1:
         return this.casas[0];
-        break;
       case 2:
         return this.casas[1];
-        break;
       case 3:
         return this.casas[2];
-        break;
       case 4:
         return this.casas[3];
-        break;
       case 5:
         return this.casas[4];
-        break;
       default:
         return this.casas[0];
-      // code block
     }
   }
 
   casass: any[] = [];
-
-
 }

@@ -1,5 +1,4 @@
 <div class="card-filter">
-  <!--<input [formControl]="casa"  required />-->
   <div>
     <img
       [src]="cardCasainfo.image"
@@ -10,7 +9,26 @@
   <div class="card-body">
     <h5 class="card-title">{{ cardCasainfo.title }}</h5>
     <p class="card-text">{{ cardCasainfo.description }}</p>
-    <a href={{this.index+cardCasainfo.id}}> <button class="button">Ver más</button></a>
+    <a [href]="'/index?search=' + cardCasainfo.id">
+      <button class="button">Ver más</button>
+    </a>
+  </div>
+
+  <!-- Sección de reseñas -->
+  <div class="reviews-section">
+    <h6>Reseñas</h6>
+    <div *ngIf="reviews.length > 0; else noReviews">
+      <div *ngFor="let review of reviews" class="review">
+        <strong>Usuario ID: {{ review.userId }}</strong>
+        <p>Calificación: {{ review.rating }}/5</p>
+        <p>{{ review.comment }}</p>
+        <em>{{ review.createdAt | date: 'short' }}</em>
+      </div>
+    </div>
+    <ng-template #noReviews>
+      <p>No hay reseñas disponibles para esta propiedad.</p>
+    </ng-template>
+
+    
   </div>
 </div>
-

@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { FormBuilder } from '@angular/forms';import { RouterOutlet } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ReviewService, Review } from '../../services/supabase/review.service';
+import { ReviewFormComponent } from '../../features/pages/reviews/review-form.component'; 
+import { CommonModule } from '@angular/common';
 
 interface Casa {
-  id:string;
+  id: string;
   rooms: string;
   title: string;
   description: string;
@@ -24,17 +24,35 @@ interface Casa {
 @Component({
   selector: 'app-galery-card',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReviewFormComponent],
   templateUrl: './galery-card.component.html',
-  styleUrl: './galery-card.component.css'
+  styleUrls: ['./galery-card.component.css'],
 })
-export class GaleryCardComponent {
+export class GaleryCardComponent implements OnInit {
+  @Input() cardCasainfo!: Casa;
 
-  index="/index?search="
+  reviews: Review[] = []; // Lista de reseñas para la propiedad
 
-  name = new FormControl('');
+  constructor(private reviewService: ReviewService) {}
 
-  // input que trae los datos que se 
-  @Input({ required: true }) cardCasainfo!: Casa;
+  ngOnInit(): void {
+    this.loadReviews();
+  }
 
+  // Cargar las reseñas de la propiedad
+  private loadReviews(): void {
+    this.reviewService.getReviewsByProperty(this.cardCasainfo.id).subscribe(
+      (response) => {
+        this.reviews = response;
+      },
+      (error) => {
+        console.error('Error al cargar reseñas:', error);
+      }
+    );
+  }
+
+  // Actualizar las reseñas tras agregar una nueva
+  onReviewSubmitted(): void {
+    this.loadReviews();
+  }
 }

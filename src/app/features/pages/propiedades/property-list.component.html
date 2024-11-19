@@ -1,0 +1,17 @@
+<main>
+  
+  <div class="property-list">
+    <h2>Lista de Propiedades</h2>
+
+    <ul>
+      <li *ngFor="let propiedad of propiedades">
+        <div class="property-item">
+          <span>{{ propiedad.title }}</span>
+          <button (click)="editProperty(propiedad.id)">Editar</button>
+          <button (click)="deleteProperty(propiedad.id)">Eliminar</button>
+        </div>
+      </li>
+      <button (click)="goHome()">Volver al Home</button>
+    </ul>
+  </div>
+</main>
