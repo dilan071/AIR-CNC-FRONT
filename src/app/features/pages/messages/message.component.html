@@ -1,0 +1,58 @@
+<main class="main-container">
+  <div class="chat-container">
+    
+    <div class="contact-list">
+      <h3>Propietarios</h3>
+      <div *ngFor="let contact of contacts" class="contact-item" (click)="selectContact(contact)">
+        <img [src]="contact.avatar" alt="avatar" class="contact-avatar">
+        <div class="contact-info">
+          <strong>{{ contact.name }}</strong>
+          <small>{{ contact.lastMessage | date: 'short' }}</small>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="chat-area">
+      <div *ngIf="selectedContact" class="chat-header">
+        <h3>Chat con {{ selectedContact.name }}</h3>
+      </div>
+      <div *ngIf="messages.length > 0" class="message-history">
+        <div *ngFor="let message of messages" class="message-item" [ngClass]="{ 'message-sent': message.sender_user_id === senderUser, 'message-received': message.sender_user_id !== senderUser }">
+          <div class="message-body">
+            <p>{{ message.message }}</p>
+          </div>
+          <div class="message-footer">
+            <small>{{ message.createdAt | date: 'short' }}</small>
+          </div>
+        </div>
+      </div>
+
+    
+      <div *ngIf="messages.length === 0" class="no-messages">
+        <p>No tienes mensajes con este propietario.</p>
+      </div>
+
+      
+      <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <textarea
+            id="message"
+            formControlName="message"
+            class="form-control"
+            rows="4"
+            placeholder="Escribe tu mensaje aquí..."
+            *ngIf="selectedContact"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!messageForm.valid || !selectedContact">
+          Enviar mensaje
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="regresar">
+    <p><a routerLink="/home">Regresar</a></p>
+  </div>
+</main>

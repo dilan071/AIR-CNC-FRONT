@@ -1,69 +1,48 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../../services/supabase/user.service';
+import { UserService } from '../../../auth/services/user.service'; 
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'; 
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule],
+  imports: [RouterLink, FormsModule, CommonModule ], 
   templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.less']
+  styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
-  profile: any = { fullName: '', email: '', userName: '', password: '' };
+  profile: any = { fullName: '', email: '', userName: '', password: '', bio: '', profilePicture: '' };
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) {}
+
+
 
   ngOnInit() {
-    const userName = localStorage.getItem('currentUser');
-    if (userName) {
-      const userProfile = this.userService.getProfile(userName);
-      if (userProfile) {
-        this.profile = userProfile;
-      } else {
-        this.router.navigate(['/login']);
-      }
-    } else {
-      this.router.navigate(['/login']);
-    }
+    this.userService.getProfile(this.userService.currentUserName).subscribe({
+      next: (profile) => (this.profile = profile),
+      error: () => this.router.navigate(['/login']),
+    });
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.profile.profilePicture = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
   updateProfile() {
-    const { fullName, email, password, userName } = this.profile; // Asegúrate de incluir userName
-
-    if (!fullName || !email || !password || !userName) { // Validación de todos los campos
-      Swal.fire({
-        title: 'Error',
-        text: 'Debe completar todos los campos',
-        icon: 'error'
-      });
-      return;
-    }
-
-    // Actualiza el perfil y pasa el nuevo userName
-    const response = this.userService.updateProfile(userName, { fullName, email, password, userName });
-
-    if (response.success) {
-      // Actualiza 'currentUser' en localStorage si se cambió el nombre de usuario
-      localStorage.setItem(userName.toLowerCase().trim(), JSON.stringify(this.profile));
-      localStorage.setItem('currentUser', userName.toLowerCase().trim()); // Asegúrate de usar el nuevo nombre de usuario
-
-      Swal.fire({
-        title: 'Éxito',
-        text: 'Perfil actualizado correctamente',
-        icon: 'success'
-      });
-    } else {
-      Swal.fire({
-        title: 'Error',
-        text: response.message,
-        icon: 'error'
-      });
-    }
+    this.userService.updateProfile(this.profile).subscribe({
+      next: () => Swal.fire('Éxito', 'Perfil actualizado', 'success'),
+      error: () => Swal.fire('Error', 'No se pudo actualizar el perfil', 'error'),
+    });
   }
 
   logout() {

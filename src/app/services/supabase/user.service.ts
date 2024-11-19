@@ -1,81 +1,109 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { LoginResponse, RegistroResponse } from '../../features/pages/login-response.interface';
+import { User } from '../../features/pages/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  login(userName: string, password: string): LoginResponse {
-    const userData = localStorage.getItem(userName.toLowerCase().trim());
+  private apiUrl = 'http://localhost:3000/api/User'; // URL base para el backend
 
-    if (!userData) {
-      return {
-        success: false,
-        message: 'Usuario no encontrado'
-      };
-    }
+  constructor(private http: HttpClient) {}
 
-    const user = JSON.parse(userData);
+  // Registro de usuario
+  register(user: { userName: string; password: string; email: string; fullName: string }): Observable<RegistroResponse> {
+    // Mapeamos el rol para que coincida con el backend
+    const backendRole = user.userName === 'admin' ? 'owner' : 'buyer';  // Asumimos que 'admin' tiene rol de propietario, si no es así, será comprador
 
-    if (user.password !== password) {
-      return {
-        success: false,
-        message: 'Usuario o contraseña incorrectos'
-      };
-    }
+    const registerUrl = backendRole === 'buyer' 
+      ? `${this.apiUrl}/register-buyer` 
+      : `${this.apiUrl}/register-owner`;
 
-    return {
-      success: true
-    };
+    return this.http.post<any>(registerUrl, { ...user, role: backendRole }).pipe(  // Enviamos el rol mapeado
+      map(response => {
+        if (response.success) {
+          return { success: true };
+        } else {
+          return {
+            success: false,
+            message: response.message || 'Error al registrar usuario'
+          };
+        }
+      })
+    );
   }
 
-  register(user: { userName: string; password: string; email: string; fullName: string }): RegistroResponse {
-    if (localStorage.getItem(user.userName.toLowerCase().trim())) {
-      return {
-        success: false,
-        message: 'Usuario ya existe'
-      };
-    }
+  // Inicio de sesión
+  login(userName: string, password: string): Observable<LoginResponse> {
+    const body = { username: userName, password };
 
-    const userData = JSON.stringify(user);
-    localStorage.setItem(user.userName.toLowerCase().trim(), userData);
+    return this.http.post<any>(`${this.apiUrl}/login`, body).pipe(  // Endpoint para login
+      map(response => {
+        if (response.success) {
+          // Guarda el token y el usuario en sessionStorage
+          sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('currentUser', userName.toLowerCase().trim());
+          sessionStorage.setItem('currentUserRole', response.role);
 
-    return {
-      success: true
-    };
+          return {
+            success: true,
+            role: response.role
+          };
+        } else {
+          return {
+            success: false,
+            message: response.message || 'Usuario o contraseña incorrectos'
+          };
+        }
+      })
+    );
   }
 
-  getProfile(userName: string) {
-    const userData = localStorage.getItem(userName.toLowerCase().trim());
-    return userData ? JSON.parse(userData) : null;
+  // Obtener perfil de usuario
+  getProfile(userName: string): Observable<User | null> {
+    const token = sessionStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+
+    return this.http.get<any>(`${this.apiUrl}/profile/${userName}`, { headers }).pipe(
+      map(response => {
+        if (response.success) {
+          return response.user as User;
+        } else {
+          return null;
+        }
+      })
+    );
   }
 
-  updateProfile(userName: string, updatedData: { fullName: string; email: string; password: string; userName: string }) {
-    const userData = this.getProfile(userName);
-    if (userData) {
-      const updatedUser = {
-        ...userData,
-        ...updatedData
-      };
+  // Actualizar perfil de usuario
+  updateProfile(userName: string, updatedData: Partial<User>): Observable<{ success: boolean; message: string }> {
+    const token = sessionStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
 
-      // Si se cambia el nombre de usuario, se debe actualizar también el localStorage
-      if (userData.userName !== updatedData.userName) {
-        localStorage.removeItem(userData.userName.toLowerCase().trim()); // Elimina el antiguo
-        localStorage.setItem(updatedData.userName.toLowerCase().trim(), JSON.stringify(updatedUser)); // Guarda el nuevo
-      } else {
-        localStorage.setItem(userName.toLowerCase().trim(), JSON.stringify(updatedUser)); // Guarda el mismo
-      }
+    return this.http.put<any>(`${this.apiUrl}/update-profile/${userName}`, updatedData, { headers }).pipe(
+      map(response => {
+        if (response.success) {
+          return {
+            success: true,
+            message: 'Perfil actualizado correctamente'
+          };
+        } else {
+          return {
+            success: false,
+            message: response.message || 'Error al actualizar perfil'
+          };
+        }
+      })
+    );
+  }
 
-      return {
-        success: true,
-        message: 'Perfil actualizado correctamente'
-      };
-    } else {
-      return {
-        success: false,
-        message: 'Usuario no encontrado'
-      };
-    }
+  // Cerrar sesión
+  logout(): void {
+    sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUserRole');
+    sessionStorage.removeItem('token');
   }
 }

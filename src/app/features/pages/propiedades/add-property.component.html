@@ -1,0 +1,66 @@
+<header>
+  <!-- Menú centrado -->
+  <nav>
+    <ul>
+      <li><a routerLink="/home">Inicio</a></li>
+      <li><a routerLink="/mi-perfil">Mi Perfil</a></li>
+      <li><a routerLink="/añadir-propiedad">Añadir Propiedad</a></li>
+      <li><a routerLink="/lista-de-propiedades">Lista de Propiedades</a></li>
+      <li><a routerLink="/editar-propiedad/1">Editar Propiedad</a></li>
+      <li><a routerLink="/reservas">Mis Reservas</a></li>
+      <li><a routerLink="/mensajes">Mensajes</a></li>
+      <li><a routerLink="/valoraciones">Reseñas</a></li>
+      <li><a routerLink="/notificaciones">Notificaciones</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="login-container">
+    <h2>Añadir Propiedad</h2>
+    <form [formGroup]="addPropertyForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="title">Título:</label>
+        <input id="title" type="text" formControlName="title" required>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Precio:</label>
+        <input id="price" type="number" formControlName="price" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descripción:</label>
+        <input id="description" type="text" formControlName="description" required>
+      </div>
+
+      <div class="form-group">
+        <label for="country">País:</label>
+        <input id="country" type="text" formControlName="country" required>
+      </div>
+
+      <div class="form-group">
+        <label for="city">Ciudad:</label>
+        <input id="city" type="text" formControlName="city" required>
+      </div>
+
+      <div class="form-group">
+        <label for="rooms">Habitaciones:</label>
+        <input id="rooms" type="number" formControlName="rooms" required>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Imagen:</label>
+        <input id="image" type="text" formControlName="image" required>
+      </div>
+
+      <div class="form-group">
+        <label for="mapSrc">Ciudad (Mapa):</label>
+        <input id="mapSrc" type="text" formControlName="mapSrc" required>
+      </div>
+
+      <button type="submit" [disabled]="!addPropertyForm.valid">Guardar Propiedad</button>
+      <button type="button" (click)="goHome()">Volver al Home</button>
+    </form>
+  </div>
+</main>

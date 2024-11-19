@@ -1,0 +1,30 @@
+<main>
+  <div class="notifications-container">
+    <h2>Notificaciones</h2>
+
+    <!-- Mostrar mensaje si no hay notificaciones -->
+    <div *ngIf="notifications.length === 0" class="no-notifications">
+      <p>No tienes notificaciones nuevas.</p>
+    </div>
+    <div class="regresar">
+      <p><a routerLink="/home">Regresar</a></p>
+    </div>
+
+    <!-- Mostrar lista de notificaciones -->
+    <ul *ngIf="notifications.length > 0" class="notifications-list">
+      <li *ngFor="let notification of notifications" class="notification-item">
+        <div class="notification-content">
+          <p>{{ notification.message }}</p>
+          <small>{{ notification.timestamp | date: 'short' }}</small>
+        </div>
+        <button (click)="deleteNotification(notification.receiver_user_id)" class="delete-button">
+          Eliminar
+        </button>   
+        <div class="regresar">
+        <p><a routerLink="/home">Regresar</a></p>
+      </div>   
+      </li>
+    </ul>
+  </div>
+  
+</main>

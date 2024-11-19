@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common'; 
 import { SearchBarComponent } from '../components/search-bar/search-bar.component';
 import { GaleryCardComponent } from '../components/galery-card/galery-card.component';
-import { FormControl } from '@angular/forms';
 import { Supabase } from '../utils/images';
+import { PerfilComponent } from '../features/pages/perfil/perfil.component';
+import { UserService } from '../auth/services/user.service';
 
-interface Casa {
+
+export interface Casa {
   id: string;
   rooms: string;
   title: string;
@@ -21,33 +24,43 @@ interface Casa {
   mapSrc: string;
   date: string;
   searchTerm?: string;
+  reseñas?: string[];
 }
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterOutlet, SearchBarComponent, GaleryCardComponent, ],
+  imports: [
+    CommonModule, 
+    RouterOutlet, 
+    RouterLink, 
+    SearchBarComponent, 
+    GaleryCardComponent,
+    PerfilComponent
+  ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {
-  // listas que guardan el material filtrado
-  listFilterCountry: Casa[] = [];
-  listFilterCity: Casa[] = [];
-  listFilterRooms: Casa[] = [];
-  listFilterMaxPrice: Casa[] = [];
-  listFilterMinPrice: Casa[] = [];
-  listFilterMaxDate: Casa[] = [];
-  listFilterMinDate: Casa[] = [];
+export class HomeComponent implements OnInit {
+  user = {
+    profilePicture: '',
+    fullName: '',
+    email: ''
+  };
+  defaultProfileImage = '/assets/no-avatar.jpg';
+ 
+  constructor(private userService: UserService) {}
 
+
+
+  // Listas que guardan el material filtrado
   casas: Casa[] = [
     {
       id: '1',
       title: 'Casa en la Playa',
       rooms: '1',
       image: Supabase('casa1.jpeg'),
-      description:
-        'Una hermosa casa frente al mar con acceso privado a la playa.',
+      description: 'Una hermosa casa frente al mar con acceso privado a la playa.',
       price: '200000',
       country: 'colombia',
       city: 'bogoto',
@@ -122,9 +135,9 @@ export class HomeComponent {
       type: 'Venta',
       mapSrc: 'https://www.google.com/maps/embed?pb=...Casa3Ubicacion',
     },
-    // Agrega más casas aquí
   ];
-  // carrusel
+
+  // Carrusel
   images = [
     Supabase('casa3.jpeg'),
     Supabase('casa6.jpeg'),
@@ -133,15 +146,37 @@ export class HomeComponent {
 
   currentIndex = 0;
 
+  ngOnInit(): void {
+    // Cargar los datos del usuario desde el localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    if (storedUser) {
+      this.user.profilePicture = storedUser.profilePicture || this.defaultProfileImage;
+      this.user.fullName = storedUser.fullName || 'Nombre no disponible';
+      this.user.email = storedUser.email || 'Email no disponible';
+    }
+  }
+
+  updateUserProfile() {
+    // Aquí puedes definir el comportamiento para actualizar la imagen y el email
+    const updatedUser = {
+      profilePicture: this.user.profilePicture,
+      fullName: this.user.fullName,
+      email: this.user.email
+    };
+
+    // Guardamos la nueva imagen y el correo en el localStorage
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  }
+
   nextImage() {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
   }
 
   prevImage() {
-    this.currentIndex =
-      (this.currentIndex - 1 + this.images.length) % this.images.length;
+    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
   }
-  // valor de los filtros guardados localmente
+
+  // Valor de los filtros guardados localmente
   criterios = [''];
   title = 'Air-cn';
   rooms = '';
@@ -153,7 +188,12 @@ export class HomeComponent {
   minprice = '';
   maxprice = '';
 
-  // funcion actualiza el valor de los filtros
+  // Función para trackBy en el *ngFor para identificar elementos únicos por su título
+  trackByTitle(index: number, item: Casa) {
+    return item.title;
+  }
+
+  // Funcion que actualiza el valor de los filtros
   setFilters(event: any) {
     this.rooms = event['rooms'];
     this.searchTerm = event['searchTerm'];
@@ -163,99 +203,41 @@ export class HomeComponent {
     this.maxdate = event['maxdate'];
     this.minprice = event['minprice'];
     this.maxprice = event['maxprice'];
-
   }
-  // funcion que inicia el filtrado general en el orden
-  // locations(ubicacion) => filterRooms(habitaciones) => filterMinPrice(precio minimo) =>filterMaxPrice(precio maximo)  => filterMinDate(fecha minima) => filterMaxDate(fecha maxima)  =>
+
+  // Funcion que inicia el filtrado general en el orden
   filter() {
-    // limpio las listas
-    this.listFilterCountry = [];
-    this.listFilterCity = [];
-    this.listFilterRooms = [];
-    this.listFilterMaxPrice = [];
-    this.listFilterMinPrice = [];
-    this.listFilterMaxDate = [];
-    this.listFilterMinDate = [];
-    //inicio las llamadas
-    this.filterCountry(this.casas);
-    this.filterCity(this.listFilterCountry);
-    this.filterRooms(this.listFilterCity);
-    this.filterMinPrice(this.listFilterRooms);
-    this.filterMaxPrice(this.listFilterMinPrice);
-    this.filterMinDate(this.listFilterMaxPrice);
-    this.filterMaxDate(this.listFilterMinDate);
+    let filteredCasas = [...this.casas]; // Crea una copia de la lista original para no modificarla
 
-    return this.listFilterMaxDate;
-  }
-  // funcion que filtra las casas por una fecha maxima
-  filterMaxDate(list: Casa[]) {
-    for (let index = 0; index < list.length; index++) {
-      this.maxdate !== ''
-        ? new Date(list[index].date) <= new Date(this.maxdate)
-          ? this.listFilterMaxDate.push(list[index])
-          : null
-        : this.listFilterMaxDate.push(list[index]);
+    // Aplica todos los filtros
+    if (this.country) {
+      filteredCasas = filteredCasas.filter(casa => casa.country.toLowerCase().includes(this.country.toLowerCase()));
     }
-  }
-  // funcion que filtra las casas por una fecha minima
-  filterMinDate(list: Casa[]) {
-    for (let index = 0; index < list.length; index++) {
-      this.mindate !== ''
-        ? new Date(list[index].date) >= new Date(this.mindate)
-          ? this.listFilterMinDate.push(list[index])
-          : null
-        : this.listFilterMinDate.push(list[index]);
+
+    if (this.city) {
+      filteredCasas = filteredCasas.filter(casa => casa.city.toLowerCase().includes(this.city.toLowerCase()));
     }
-  }
-  // funcion que hace efecto sobre las casas con el filtro de maximo precio y minimo precio
-  filterMaxPrice(list: Casa[]) {
-    for (let index = 0; index < list.length; index++) {
-      this.maxprice !== ''
-        ? Number(list[index].price) < Number(this.maxprice)
-          ? this.listFilterMaxPrice.push(list[index])
-          : null
-        : this.listFilterMaxPrice.push(list[index]);
+
+    if (this.searchTerm) {
+      filteredCasas = filteredCasas.filter(casa => casa.title.toLowerCase().includes(this.searchTerm.toLowerCase()));
     }
-  }
-  // funcion que hace efecto sobre las casas con el filtro de minimo precio y minimo precio
-  filterMinPrice(list: Casa[]) {
-    for (let index = 0; index < list.length; index++) {
-      this.minprice !== ''
-        ? Number(list[index].price) > Number(this.minprice)
-          ? this.listFilterMinPrice.push(list[index])
-          : null
-        : this.listFilterMinPrice.push(list[index]);
+
+    // Filtrado por fecha
+    if (this.mindate) {
+      filteredCasas = filteredCasas.filter(casa => new Date(casa.date) >= new Date(this.mindate));
     }
-  }
-  // funcion que hace efecto sobre las casas con el filtro de habitaciones
-  filterRooms(list: Casa[]) {
-    for (let index = 0; index < list.length; index++) {
-      this.rooms !== ''
-        ? list[index].rooms == this.rooms
-          ? this.listFilterRooms.push(list[index])
-          : Number(list[index].rooms) > 3 && this.rooms == '4+'
-          ? this.listFilterRooms.push(list[index])
-          : null
-        : this.listFilterRooms.push(list[index]);
+    if (this.maxdate) {
+      filteredCasas = filteredCasas.filter(casa => new Date(casa.date) <= new Date(this.maxdate));
     }
-  }
-  // funcion que hace efecto sobre las casas con el filtro de  ciudad
-  filterCity(list: Casa[]) {
-    for (let index = 0; index < list.length; index++) {
-      this.city !== ''
-        ? list[index].city == this.city
-          ? this.listFilterCity.push(list[index])
-          : null
-        : this.listFilterCity.push(list[index]);
+
+    // Filtrado por precio
+    if (this.minprice) {
+      filteredCasas = filteredCasas.filter(casa => parseInt(casa.price) >= parseInt(this.minprice));
     }
-  }
-  filterCountry(list: Casa[]) {
-    for (let index = 0; index < list.length; index++) {
-      this.country !== ''
-        ? list[index].country == this.country
-          ? this.listFilterCountry.push(list[index])
-          : null
-        : this.listFilterCountry.push(list[index]);
+    if (this.maxprice) {
+      filteredCasas = filteredCasas.filter(casa => parseInt(casa.price) <= parseInt(this.maxprice));
     }
+
+    return filteredCasas;
   }
-}
+} 

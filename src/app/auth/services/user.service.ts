@@ -1,35 +1,49 @@
 import { Injectable } from '@angular/core';
-import { LoginResponse, RegistroResponse }  from '../pages/interfaces/login-response.interface'; // Ajusta la ruta si es necesario
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { environment } from '../../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-    
-  login(userName: string, password: string): LoginResponse {
-    const storedPassword = localStorage.getItem(userName.toLowerCase().trim());
+  private baseUrl: string = environment.apiUrl;  
+  private currentUser = localStorage.getItem('user');
 
-    if (storedPassword !== password) {
-      return {
-        success: false,
-        message: 'Usuario o contraseña incorrectos'
-      };
-    }
-    return {
-      success: true
-    };
+  constructor(private http: HttpClient) {}
+
+  getProfile(email: string): Observable<any> {
+    return of(JSON.parse(localStorage.getItem('user') || '{}'));
+  }
+  
+  updateProfile(profileData: any): Observable<any> {
+    localStorage.setItem('user', JSON.stringify(profileData));
+    return of({ success: true });
   }
 
-  register(user: { userName: string; password: string; email: string }): RegistroResponse {
-    if (localStorage.getItem(user.userName.toLowerCase().trim())) {
-      return {
-        success: false,
-        message: 'Usuario ya existe'
-      };
-    }
-    localStorage.setItem(user.userName.toLowerCase().trim(), user.password);
-    return {
-      success: true
-    };
+  
+  get currentUserName(): string {
+    return this.currentUser || '';
+  }
+
+
+  /**
+   * Método para iniciar sesión
+   * @param userData 
+   * @returns 
+   */
+  login(userData: { email: string; password: string, username: string, is_owner: boolean }): Observable<any> {
+    const loginUrl = `${this.baseUrl}/user/login`;  // Endpoint correcto para el login
+    return this.http.post<any>(loginUrl, userData); // Solicitud POST con los datos en el cuerpo
+  }
+
+  /**
+   * Método para registrar un nuevo usuario
+   * @param userData 
+   * @returns 
+   */
+  register(userData: { email: string; username: string; password: string; is_owner: boolean }): Observable<any> {
+    const registerUrl = `${this.baseUrl}/user/register-${userData.is_owner ? 'owner' : 'buyer'}`;
+    return this.http.post<any>(registerUrl, userData);  
   }
 }

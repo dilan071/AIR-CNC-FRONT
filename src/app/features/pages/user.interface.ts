@@ -2,6 +2,8 @@ export interface User{
     userName: string;
     password: string;
     email?: string;
-    nombreCompleto?: string;
+    fullName?: string; 
     confirmPassword?: string;
+    bio?: string;  
+    profilePicture?: string; 
 }

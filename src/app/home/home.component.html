@@ -6,52 +6,66 @@
 <!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<main class="todo">
+  <header>
+    <!-- Avatar a la izquierda -->
+    <section id="profile">
+      <div class="avatar-container">
+        <img [src]="user.profilePicture || defaultProfileImage" alt="Foto de perfil" class="avatar" />
+        <div>
+          <span id="userName">{{ user.fullName }}</span>
+          
+        </div>
+      </div>
+    </section>
 
-<header>
-  <div id="profile">
-    <img src="assets/casa2.jpeg" class="avatar" alt="avatar" />
-    <span id="userName">Dilan</span>
-  </div>
-  <nav>
-    <ul>
-      <a href="/home">
-        <label>Home</label></a>
-      <li><a href="/mi-perfil">Mi perfil</a></li>
-      <li><a href="/gestion-propiedades">Gestión de propiedades</a></li>
-      <li><a   href="/login/login.component.html">cerrar sesion</a></li>
-    </ul>
-  </nav>
-</header>
+    <!-- Menú centrado -->
+    <nav>
+      <ul>
+        <li><a routerLink="/home">Inicio</a></li>
+        <li><a routerLink="/mi-perfil">Mi Perfil</a></li>
+        <li><a routerLink="/añadir-propiedad">Añadir Propiedad</a></li>
+        <li><a routerLink="/lista-de-propiedades">Lista de Propiedades</a></li>
+        <li><a routerLink="/editar-propiedad/1">Editar Propiedad</a></li>
+        <li><a routerLink="/reservas">Mis Reservas</a></li>
+        <li><a routerLink="/mensajes">Mensajes</a></li>
+        <li><a routerLink="/valoraciones">Reseñas</a></li>
+        <li><a routerLink="/notificaciones">Notificaciones</a></li>
+      </ul>
+    </nav>
 
-<main class="main">
-  <div class="carousel">
-    <img
-      [src]="images[currentIndex]"
-      alt="Imagen del carrusel"
-      class="carousel-image"
-    />
-    <div class="controls">
-      <button (click)="prevImage()" class="control-button">Anterior</button>
-      <button (click)="nextImage()" class="control-button">Siguiente</button>
+    <!-- Cerrar sesión a la derecha -->
+    <div class="logout-button">
+      <p><a routerLink="/login">Cerrar sesión</a></p>
     </div>
-  </div>
-  
-  <div class="content">
-    <div>
-      <app-search-bar (setCriterios)="setFilters($event)"></app-search-bar>
-      <div class="flex-content">
-        @for (item of filter(); track item.title;) {
-          @if(item.title.toLowerCase().includes(this.searchTerm)) {
-            <app-galery-card [cardCasainfo]="item"></app-galery-card>
-          }
-        } @empty {
-          <p class="card-filter">There are no items.</p>
-        }
+  </header>
+
+  <main class="main">
+    <!-- Carrusel de imágenes -->
+    <div class="carousel">
+      <img [src]="images[currentIndex]" alt="Imagen del carrusel" class="carousel-image" />
+      <div class="controls">
+        <button (click)="prevImage()" class="control-button">Anterior</button>
+        <button (click)="nextImage()" class="control-button">Siguiente</button>
       </div>
     </div>
-  </div>
-</main>
 
+    <!-- Contenido de búsqueda y visualización de propiedades -->
+    <div class="content">
+      <div>
+        <app-search-bar (setCriterios)="setFilters($event)"></app-search-bar>
+        <div class="flex-content">
+          <ng-container *ngFor="let item of filter(); trackBy: trackByTitle">
+            <app-galery-card *ngIf="item.title.toLowerCase().includes(searchTerm)" [cardCasainfo]="item"></app-galery-card>
+          </ng-container>
+          <p *ngIf="filter().length === 0" class="card-filter">No hay propiedades disponibles.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <router-outlet></router-outlet>
+
+</main>
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
@@ -59,4 +73,4 @@
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<router-outlet></router-outlet>
+

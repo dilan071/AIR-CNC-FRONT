@@ -1,0 +1,175 @@
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+main {
+  background-image: url('https://jzoykxtgshtojpikzhhd.supabase.co/storage/v1/object/public/homes/fondo.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Contenedor del formulario */
+.login-container {
+  max-width: 400px;
+  width: 100%;
+  background: rgba(82, 127, 141, 0.9);
+  border-radius: 10px;
+  padding: 40px 20px;
+  margin: auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Título */
+.login-container h2 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #050505;
+}
+
+/* Estilo de los campos de entrada */
+.login-container label {
+  display: block;
+  margin-top: 20px;
+  font-size: 16px;
+  color: white;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #f2f2f2;
+  font-size: 16px;
+  outline: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Estilo para los botones */
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 17px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+  background-color: #0ad156;
+  color: black;
+}
+
+/* Menú superior */
+header {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 20px 40px; 
+  background-color:  #dfe6e0; 
+  border-bottom: 1px solid #ccc; 
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+}
+
+header nav ul li {
+  margin-right: 20px;
+}
+
+header nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+header nav ul li a:hover {
+  color: #0ad156;
+  transition: color 0.3s;
+}
+
+/* Deshabilitar botón de envío */
+button[type="submit"]:disabled {
+  background-color: #176e1c;
+  cursor: not-allowed;
+}
+
+/* Botón Volver al Home */
+button {
+  background-color: #0ad156;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #0b8e44;
+}
+
+@media (max-width: 768px) {
+  main {
+      padding: 20px;
+  }
+
+  .login-container {
+      padding: 20px 15px;
+  }
+
+  header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+  }
+
+  header nav ul {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  header nav ul li {
+      margin-right: 0;
+      margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container h2 {
+      font-size: 20px;
+  }
+
+  .login-container input,
+  .btn {
+      padding: 10px;
+      font-size: 15px;
+  }
+
+  header nav ul li a {
+      font-size: 14px;
+  }
+}
